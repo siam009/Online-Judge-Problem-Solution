@@ -1,0 +1,159 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+struct node
+{
+    int p,w,gd,gc,gp,l,t,ga;
+    string s;
+};
+
+bool cmp(node a,node b)
+{
+    if(a.p>b.p)
+        return true;
+    else if(a.p<b.p)
+        return false;
+    else
+    {
+        if(a.w>b.w)
+            return true;
+        else if(a.w<b.w)
+            return false;
+        else
+        {
+            if(a.gd>b.gd)
+                return true;
+            else if(a.gd<b.gd)
+                return false;
+            else
+            {
+                if(a.gc>b.gc)
+                    return true;
+                else if(a.gc<b.gc)
+                    return false;
+                else
+                {
+                    if(a.gp<b.gp)
+                        return true;
+                    else if(a.gp>b.gp)
+                        return false;
+                    else
+                    {
+                        string x=a.s;
+                        string y=b.s;
+                        for(int i=0; i<x.size()&&i<y.size(); i++)
+                        {
+                            if(x[i]>='A'&&x[i]<='Z')
+                                x[i]+=(-'A'+'a');
+                            if(y[i]>='A'&&y[i]<='Z')
+                                y[i]+=(-'A'+'a');
+                            if(x[i]<y[i])
+                                return true;
+                            else if(x[i]>y[i])
+                                return false;
+                        }
+                        if(x.size()>y.size())
+                            return false;
+                        else
+                            return true;
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    int t,n,m;
+    string s,str,st,str1;
+    cin>>t;
+    cin.ignore();
+    for(int cas=0; cas<t; cas++)
+    {
+        if(cas)
+            cout<<endl;
+        getline(cin,s);
+        cin>>n;
+        cin.ignore();
+        node arr[n+1];
+        map<string,int>mp;
+        for(int i=1; i<=n; i++)
+        {
+            getline(cin,arr[i].s);
+            mp[arr[i].s]=i;
+            arr[i].l=arr[i].t=arr[i].ga=arr[i].p=arr[i].w=arr[i].gd=arr[i].gc=arr[i].gp=0;
+        }
+        cin>>m;
+        cin.ignore();
+        while(m--)
+        {
+            getline(cin,st);
+            int i=0,a=0,b=0,ta,tb;
+            str="";
+            while(st[i]!='#')
+            {
+                str+=st[i];
+                i++;
+            }
+            i++;
+            while(st[i]!='@')
+            {
+                a=a*10+(st[i]-'0');
+                i++;
+            }
+            i++;
+            while(st[i]!='#')
+            {
+                b=b*10+(st[i]-'0');
+                i++;
+            }
+            i++;
+            str1="";
+            while(i<st.size())
+            {
+                str1+=st[i];
+                i++;
+            }
+            ta=mp[str];
+            tb=mp[str1];
+            arr[ta].gp++;
+            arr[tb].gp++;
+            arr[ta].gc+=a;
+            arr[tb].gc+=b;
+            arr[ta].ga+=b;
+            arr[tb].ga+=a;
+            if(a>b)
+            {
+                arr[ta].p+=3;
+                arr[ta].w++;
+                arr[tb].l++;
+            }
+            else if(b>a)
+            {
+                arr[tb].p+=3;
+                arr[tb].w++;
+                arr[ta].l++;
+            }
+            else
+            {
+                arr[ta].p+=1;
+                arr[tb].p+=1;
+                arr[tb].t++;
+                arr[ta].t++;
+            }
+            arr[ta].gd+=(a-b);
+            arr[tb].gd+=(b-a);
+        }
+        sort(arr+1,arr+n+1,cmp);
+        cout<<s<<endl;
+        for(int i=1; i<=n; i++)
+        {
+            cout<<i<<") "<<arr[i].s<<" "<<arr[i].p<<"p, "<<arr[i].gp<<"g ("<<arr[i].w<<"-"<<arr[i].t<<"-"<<arr[i].l<<"), "<<arr[i].gd<<"gd ("<<arr[i].gc<<"-"<<arr[i].ga<<")"<<endl;
+        }
+    }
+    return 0;
+}
