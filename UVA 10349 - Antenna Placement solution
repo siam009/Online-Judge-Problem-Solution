@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int t,n,m,k,mat[50][15],ans,mcbm,par[700],te;
+char ch;
+vector<int>adj[700];
+bool vis[700],sign[700];
+
+int call(int u)
+{
+    if(vis[u])
+        return 0;
+    vis[u]=1;
+    for(auto x:adj[u])
+    {
+        if(par[x]==-1||call(par[x]))
+        {
+            par[x]=u;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    scanf("%d",&t);
+    for(int cas=1;cas<=t;cas++)
+    {
+        k=0;
+        memset(mat,-1,sizeof mat);
+        scanf("%d%d",&n,&m);
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                scanf(" %c",&ch);
+                if(ch=='*')
+                {
+                    mat[i][j]=k;
+                    adj[k].clear();
+                    sign[k]=(i+j)%2;
+                    if(j&&mat[i][j-1]>=0)
+                    {
+                        adj[k].push_back(mat[i][j-1]);
+                        adj[mat[i][j-1]].push_back(k);
+                    }
+                    if(i&&mat[i-1][j]>=0)
+                    {
+                        adj[k].push_back(mat[i-1][j]);
+                        adj[mat[i-1][j]].push_back(k);
+                    }
+                    k++;
+                }
+            }
+        }
+        mcbm=0;
+        memset(par,-1,sizeof par);
+        for(int i=0;i<k;i++)
+        {
+            if(sign[i])
+            {
+                memset(vis,0,sizeof vis);
+                te=call(i);
+                //cout<<te<<endl;
+                mcbm+=te;
+            }
+        }
+        ans=k-mcbm;
+        printf("%d\n",ans);
+    }
+    return 0;
+}
