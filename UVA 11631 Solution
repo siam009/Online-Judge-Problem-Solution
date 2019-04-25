@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+int par[200001];
+
+struct node
+{
+    int u,v,len;
+};
+
+bool cmp(node a,node b)
+{
+    return a.len<b.len;
+}
+
+int find_par(int x)
+{
+    if(par[x]==x)
+        return x;
+    return find_par(par[x]);
+}
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    int n,m,u,v,temp;
+    while(scanf("%d%d",&m,&n)&&(n||m))
+    {
+        node arr[n];
+        int total=0,cnt=0;
+        for(int i=0;i<n;i++)
+        {
+            if(i<m)
+                par[i]=i;
+            scanf("%d%d%d",&arr[i].u,&arr[i].v,&arr[i].len);
+            if(arr[i].u>arr[i].v)
+            {
+                temp=arr[i].u;
+                arr[i].u=arr[i].v;
+                arr[i].v=temp;
+            }
+            total+=arr[i].len;
+        }
+        par[m]=m;
+        sort(arr,arr+n,cmp);
+        for(int i=0;i<n;i++)
+        {
+            u=find_par(arr[i].u);
+            v=find_par(arr[i].v);
+            if(u!=v)
+            {
+                par[v]=u;
+                cnt++;
+                total-=arr[i].len;
+                if(cnt==m-1)
+                    break;
+            }
+        }
+        printf("%d\n",total);
+    }
+    return 0;
+}
