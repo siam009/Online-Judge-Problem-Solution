@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+ll dis[101][101];
+const ll temp=999999999999999999;
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    int c,s,q,i,u,v,j,k,cas=1;
+    ll x;
+    while(scanf("%d%d%d",&c,&s,&q)&&(c||s||q))
+    {
+        for(i=1; i<=c; i++)
+            for(int j=1; j<=c; j++)
+            {
+                dis[i][j]=temp;
+                if(i==j)
+                    dis[i][j]=0;
+            }
+        for(i=0; i<s; i++)
+        {
+            scanf("%d%d%lld",&u,&v,&x);
+            if(x<dis[u][v])
+            {
+                dis[u][v]=dis[v][u]=x;
+            }
+        }
+        for(k=1; k<=c; k++)
+        {
+            for(i=1; i<=c; i++)
+            {
+                if(i==k)
+                    continue;
+                for(j=1; j<=c; j++)
+                {
+                    if(i==j||i==k)
+                        continue;
+                    dis[i][j]=min(dis[i][j],max(dis[i][k],dis[k][j]));
+                    dis[j][i]=dis[i][j];
+                }
+            }
+        }
+        if(cas>1)
+            printf("\n");
+        printf("Case #%d\n",cas++);
+        while(q--)
+        {
+            scanf("%d%d",&u,&v);
+            if(dis[u][v]==temp)
+                printf("no path\n");
+            else
+                printf("%lld\n",dis[u][v]);
+        }
+    }
+    return 0;
+}
