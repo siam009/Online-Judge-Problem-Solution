@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    int n;
+    while(scanf("%d",&n)==1)
+    {
+        double mat[n+1][n+1][n+1];
+        int up[n+1][n+1][n+1];
+        memset(mat,0,sizeof mat);
+        for(int i=1; i<=n; i++)
+        {
+            for(int j=1; j<=n; j++)
+            {
+                if(i==j)
+                    mat[i][j][0]=1.0;
+                else
+                    scanf("%lf",&mat[i][j][0]);
+            }
+        }
+        int step=1,a=-1,b,c,d;
+        bool flag=0;
+        for(; step<=n; step++)
+        {
+            for(int k=1; k<=n; k++)
+            {
+                for(int i=1; i<=n; i++)
+                {
+                    for(int j=1; j<=n; j++)
+                    {
+                        if(mat[i][k][step-1]*mat[k][j][0]>mat[i][j][step])
+                        {
+                            mat[i][j][step]=mat[i][k][step-1]*mat[k][j][0];
+                            up[step][i][j]=k;
+                            if(i==j&&mat[i][j][step]>1.01)
+                            {
+                                flag=1;
+                                a=step;
+                                b=i;
+                                c=j;
+                                break;
+                            }
+                        }
+                    }
+                    if(flag)
+                        break;
+                }
+                if(flag)
+                    break;
+            }
+            if(flag)
+                break;
+        }
+        if(a==-1)
+            printf("no arbitrage sequence exists\n");
+        else
+        {
+            stack<int>stk;
+            stk.push(c);
+            while(a>0)
+            {
+                stk.push(up[a][b][c]);
+                c=up[a][b][c];
+                a--;
+            }
+            printf("%d",b);
+            while(!stk.empty())
+            {
+                printf(" %d",stk.top());
+                stk.pop();
+            }
+            printf("\n");
+        }
+    }
+    return 0;
+}
