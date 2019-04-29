@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    int t,n,m,u,v,s,d;
+    scanf("%d",&t);
+    for(int cas=1;cas<=t;cas++)
+    {
+        scanf("%d%d",&n,&m);
+        vector<int>adj[n];
+        for(int i=0;i<m;i++)
+        {
+            scanf("%d%d",&u,&v);
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        scanf("%d%d",&s,&d);
+        queue<int>q;
+        int lvl[n],lvl2[n];
+        memset(lvl,0,sizeof lvl);
+        memset(lvl2,0,sizeof lvl2);
+        lvl[s]=1;
+        q.push(s);
+        while(!q.empty())
+        {
+            u=q.front();
+            q.pop();
+            for(auto x:adj[u])
+            {
+                if(!lvl[x])
+                {
+                    lvl[x]=lvl[u]+1;
+                    q.push(x);
+                }
+            }
+        }
+        q.push(d);
+        lvl2[d]=1;
+        q.push(d);
+        while(!q.empty())
+        {
+            u=q.front();
+            q.pop();
+            for(auto x:adj[u])
+            {
+                if(!lvl2[x])
+                {
+                    lvl2[x]=lvl2[u]+1;
+                    q.push(x);
+                }
+            }
+        }
+        int ans=0;
+        for(int i=0;i<n;i++)
+        {
+            if(s==i&&d==i)
+                continue;
+            if(s==i)
+            {
+                ans=max(ans,lvl2[i]-1);
+                continue;
+            }
+            if(d==i)
+            {
+                ans=max(ans,lvl[i]-1);
+                continue;
+            }
+            ans=max(lvl[i]+lvl2[i]-2,ans);
+        }
+        printf("Case %d: %d\n",cas,ans);
+    }
+    return 0;
+}
