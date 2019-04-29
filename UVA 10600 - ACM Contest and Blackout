@@ -1,0 +1,99 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+struct node
+{
+    ll u,v,w;
+};
+
+ll n,t,m,u,v,w,par[1001],arr[25001];
+bool vis[25011],used[25001];
+
+bool cmp(node a,node b)
+{
+    return a.w<b.w;
+}
+
+ll find_parent(ll x)
+{
+    return (x==par[x])?x:find_parent(par[x]);
+}
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    scanf("%lld",&t);
+    while(t--)
+    {
+        scanf("%lld%lld",&n,&m);
+        vector<node>adj;
+        for(int i=1; i<=n; i++)
+            par[i]=i;
+        memset(used,0,sizeof used);
+        for(int i=0; i<m; i++)
+        {
+            scanf("%lld%lld%lld",&u,&v,&w);
+            if(u<v)
+                swap(u,v);
+            adj.push_back({u,v,w});
+        }
+        int cnt=0;
+        ll s1=0,s2=9999999999;
+        sort(adj.begin(),adj.end(),cmp);
+        bool flag=0;
+        for(ll i=0; i<m; i++)
+        {
+            u=find_parent(adj[i].u);
+            v=find_parent(adj[i].v);
+            if(u!=v)
+            {
+                cnt++;
+                par[v]=u;
+                used[i]=1;
+                s1+=adj[i].w;
+                if(cnt==n-1)
+                    break;
+            }
+        }
+        for(int i=0; i<m; i++)
+        {
+            vis[i]=0;
+        }
+        for(int k=0; k<m; k++)
+        {
+            if(!used[k])
+                continue;
+            cnt=0;
+            ll temp=0;
+            vis[k]=1;
+            for(int i=1; i<=n; i++)
+                par[i]=i;
+            for(int i=0; i<m; i++)
+            {
+                if(vis[i])
+                    continue;
+                u=find_parent(adj[i].u);
+                v=find_parent(adj[i].v);
+                if(u!=v)
+                {
+                    cnt++;
+                    par[v]=u;
+                    temp+=adj[i].w;
+                    if(cnt==n-1)
+                    {
+                        flag=1;
+                        s2=min(s2,temp);
+                        break;
+                    }
+                }
+            }
+            vis[k]=0;
+        }
+        if(!flag)
+            s2=s1;
+        printf("%lld %lld\n",s1,s2);
+    }
+    return 0;
+}
