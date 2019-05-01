@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+int m,w,risidual_graph[107][107],x,y,weight,parent[107];
+
+bool bfs()
+{
+    bool visited[m+m+1];
+    memset(visited,0,sizeof visited);
+    queue<int>q;
+    q.push(1);
+    visited[1]=1;
+    while(!q.empty())
+    {
+        x=q.front();
+        q.pop();
+        for(int i=1; i<=m+m; i++)
+        {
+            if(!visited[i]&&risidual_graph[x][i]>0)
+            {
+                visited[i]=1;
+                parent[i]=x;
+                q.push(i);
+            }
+        }
+    }
+    return visited[m+m];
+}
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    while(scanf("%d%d",&m,&w)&&(m||w))
+    {
+        memset(risidual_graph,0,sizeof risidual_graph);
+        for(int i=2; i<m; i++)
+        {
+            scanf("%d%d",&x,&y);
+            risidual_graph[x][x+m]=y;
+        }
+        for(int i=0; i<w; i++)
+        {
+            scanf("%d%d%d",&x,&y,&weight);
+            risidual_graph[x+m][y]=risidual_graph[y+m][x]=weight;
+        }
+        parent[1]=-1;
+        int max_flow=0;
+        risidual_graph[1][m+1]=risidual_graph[m][m+m]=INT_MAX;
+        while(bfs())
+        {
+            int cur_flow=INT_MAX;
+            for(int s=m+m; s!=1; s=parent[s])
+            {
+                y=parent[s];
+                if(risidual_graph[y][s]<cur_flow)
+                {
+                    cur_flow=risidual_graph[y][s];
+                }
+            }
+            max_flow+=cur_flow;
+            for(int s=m+m; s!=1; s=parent[s])
+            {
+                y=parent[s];
+                risidual_graph[y][s]-=cur_flow;
+                risidual_graph[s][y]+=cur_flow;
+            }
+        }
+        printf("%d\n",max_flow);
+    }
+    return 0;
+}
