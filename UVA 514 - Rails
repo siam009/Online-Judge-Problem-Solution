@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    int cnt=0,n;
+    while(scanf("%d",&n)&&n!=0)
+    {
+        int arr[n];
+        cnt++;
+        while(scanf("%d",&arr[0])&&arr[0])
+        {
+            stack<int>stk,temp;
+            stk.push(n);
+            for(int i=1; i<n; i++)
+            {
+                scanf("%d",&arr[i]);
+                stk.push(n-i);
+            }
+            bool flag=1;
+            for(int i=0; i<n; i++)
+            {
+                if(!temp.empty()&&temp.top()==arr[i])
+                {
+                    temp.pop();
+                }
+                else
+                {
+                    bool f=0;
+                    while(!stk.empty())
+                    {
+                        if(stk.top()==arr[i])
+                        {
+                            f=1;
+                            stk.pop();
+                            break;
+                        }
+                        else
+                        {
+                            temp.push(stk.top());
+                            stk.pop();
+                        }
+                    }
+                    if(!f)
+                    {
+                        flag=0;
+                        break;
+                    }
+                }
+            }
+            if(!temp.empty()||!flag)
+            {
+                printf("No\n");
+            }
+            else
+                printf("Yes\n");
+        }
+        printf("\n");
+    }
+    return 0;
+}
