@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int dx[]= {0,0,1,-1,1,1,-1,-1};
+int dy[]= {1,-1,0,0,1,-1,1,-1};
+int tx[]= {2,2,1,1,-2,-2,-1,-1};
+int ty[]= {-1,1,-2,2,1,-1,-2,2};
+
+int t,n,m,cnt;
+vector<string>v;
+string s,str;
+
+bool compare(string a,string b)
+{
+    string c="",d="";
+    for(int i=0;i<a.size();i++)
+    {
+        if(a[i]!=' ')
+            c+=a[i];
+    }
+    for(int i=0;i<b.size();i++)
+    {
+        if(b[i]!=' ')
+            d+=b[i];
+    }
+    sort(c.begin(),c.end());
+    sort(d.begin(),d.end());
+    if(c==d)
+        return true;
+    return false;
+}
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    cin>>t;
+    cin.ignore();
+    cin.ignore();
+    while(t--)
+    {
+        v.clear();
+        while(getline(cin,s)&&s!="")
+        {
+            v.push_back(s);
+        }
+        n=v.size();
+        sort(v.begin(),v.end());
+        for(int i=0;i<n-1;i++)
+        {
+            for(int j=i+1;j<n;j++)
+            {
+                if(compare(v[i],v[j]))
+                    cout<<v[i]<<" = "<<v[j]<<endl;
+            }
+        }
+        if(t)
+            cout<<endl;
+    }
+    return 0;
+}
