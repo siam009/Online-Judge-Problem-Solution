@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int dx[]= {0,0,1,-1,1,1,-1,-1};
+int dy[]= {1,-1,0,0,1,-1,1,-1};
+int tx[]= {2,2,1,1,-2,-2,-1,-1};
+int ty[]= {-1,1,-2,2,1,-1,-2,2};
+
+int n,m,k,t,u,v;
+string s[300],cpy[300];
+
+bool isValid(int i,int j)
+{
+    if(i>=0&&i<n&&j>=0&&j<m)
+        return true;
+    return false;
+}
+
+void fight(int x,int y,int u,int v)
+{
+    if(s[x][y]==s[u][v])
+        return;
+    if(s[x][y]=='R')
+    {
+        if(s[u][v]=='S')
+            cpy[u][v]='R';
+        else
+            cpy[x][y]='P';
+    }
+    else if(s[x][y]=='S')
+    {
+        if(s[u][v]=='P')
+            cpy[u][v]='S';
+        else
+            cpy[x][y]='R';
+    }
+    else
+    {
+        if(s[u][v]=='R')
+            cpy[u][v]='P';
+        else
+            cpy[x][y]='S';
+    }
+}
+
+void copy_string(string a[],string b[])
+{
+    for(int i=0;i<n;i++)
+        a[i]=b[i];
+}
+
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    cin>>t;
+    while(t--)
+    {
+        cin>>n>>m>>k;
+        for(int i=0;i<n;i++)
+            cin>>s[i];
+        for(int term=0;term<k;term++)
+        {
+            copy_string(cpy,s);
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<m;j++)
+                {
+                    for(int l=0;l<4;l++)
+                    {
+                        u=i+dx[l];
+                        v=j+dy[l];
+                        if(isValid(u,v))
+                        {
+                            fight(i,j,u,v);
+                        }
+                    }
+                }
+            }
+            copy_string(s,cpy);
+        }
+        for(int i=0;i<n;i++)
+            cout<<s[i]<<endl;
+        if(t)
+            cout<<endl;
+    }
+    return 0;
+}
