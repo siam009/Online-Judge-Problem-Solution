@@ -1,0 +1,103 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+ll mx=-1,mn=1e15;
+int dx[]= {0,0,1,-1,1,1,-1,-1};
+int dy[]= {1,-1,0,0,1,-1,1,-1};
+int tx[]= {2,2,1,1,-2,-2,-1,-1};
+int ty[]= {-1,1,-2,2,1,-1,-2,2};
+
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    int t;
+    cin>>t;
+    string p[3],q[3],r[3];
+    while(t--)
+    {
+        map<char,bool>mp;
+        map<char,int>up,down;
+        string s="";
+        char ans;
+        for(int j=0; j<3; j++)
+        {
+            cin>>p[j]>>q[j]>>r[j];
+            if(r[j]=="even")
+            {
+                for(int i=0;i<p[j].size();i++)
+                    mp[p[j][i]]=1;
+                for(int i=0;i<q[j].size();i++)
+                    mp[q[j][i]]=1;
+            }
+        }
+        for(int i=0; i<3; i++)
+        {
+            //cout<<p[i]<<" "<<q[i]<<" "<<r[i]<<endl;
+            if(r[i]=="up")
+            {
+                for(int j=0;j<p[i].size();j++)
+                {
+                    if(!mp[p[i][j]])
+                    {
+                        down[p[i][j]]++;
+                        s+=p[i][j];
+                    }
+                }
+                for(int j=0;j<q[i].size();j++)
+                {
+                    if(!mp[q[i][j]])
+                    {
+                        //cout<<q[i][j]<<endl;
+                        up[q[i][j]]++;
+                        s+=q[i][j];
+                    }
+                }
+            }
+            else if(r[i]=="down")
+            {
+                for(int j=0;j<p[i].size();j++)
+                {
+                    if(!mp[p[i][j]])
+                    {
+                        up[p[i][j]]++;
+                        s+=p[i][j];
+                    }
+                }
+                for(int j=0;j<q[i].size();j++)
+                {
+                    if(!mp[q[i][j]])
+                    {
+                        down[q[i][j]]++;
+                        s+=q[i][j];
+                    }
+                }
+            }
+        }
+        int te=0,f=0;
+        for(int i=0;i<s.size();i++)
+        {
+            //cout<<s[i]<<" "<<up[i]<<" "<<down[i]<<endl;
+            if(down[s[i]]>te)
+            {
+                te=down[s[i]];
+                ans=s[i];
+                f=0;
+            }
+            if(up[s[i]]>te)
+            {
+                te=up[s[i]];
+                ans=s[i];
+                f=1;
+            }
+        }
+        //cout<<ans<<endl;
+        if(!f)
+            cout<<ans<<" is the counterfeit coin and it is heavy."<<endl;
+        else
+            cout<<ans<<" is the counterfeit coin and it is light."<<endl;
+    }
+    return 0;
+}
