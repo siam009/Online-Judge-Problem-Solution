@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+ll mod=1000000007;
+int dx[]= {0,0,1,-1,1,1,-1,-1};
+int dy[]= {1,-1,0,0,1,-1,1,-1};
+int tx[]= {2,2,1,1,-2,-2,-1,-1};
+int ty[]= {-1,1,-2,2,1,-1,-2,2};
+ll t,n,k,arr[2000007],ans,te;
+
+ll Exeuclid(ll a,ll b,ll *x,ll *y)
+{
+    if(a==0)
+    {
+        *x=0,*y=1;
+        return b;
+    }
+    ll x1,y1;
+    ll gcd=Exeuclid(b%a,a,&x1,&y1);
+    *x=y1-((b/a)*x1);
+    *y=x1;
+    return gcd;
+}
+
+ll modInverse(ll a,ll m)
+{
+    ll x, y;
+    ll g = Exeuclid(a, m, &x, &y);
+    x = (x % m + m) % m;
+    return x;
+}
+
+
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    scanf("%lld",&t);
+    arr[0]=1;
+    for(int i=1; i<=2000000; i++)
+        arr[i]=(arr[i-1]*i)%mod;
+    for(int cas=1; cas<=t; cas++)
+    {
+        scanf("%lld%lld",&n,&k);
+        te=(arr[k-1]*arr[n])%mod;
+        ans=(modInverse(te,mod)*arr[n+k-1])%mod;
+        printf("Case %d: %lld\n",cas,ans);
+    }
+    return 0;
+}
