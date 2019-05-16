@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+int dx[]= {0,0,1,-1,1,1,-1,-1};
+int dy[]= {1,-1,0,0,1,-1,1,-1};
+int tx[]= {2,2,1,1,-2,-2,-1,-1};
+int ty[]= {-1,1,-2,2,1,-1,-2,2};
+int t;
+ll n,ans;
+ll arr[20],brr[20];
+
+ll compute(ll x)
+{
+    ll y=5;
+    ll res=0;
+    while(y<=x)
+    {
+        res+=(x/y);
+        y*=5;
+    }
+    return res;
+}
+
+int main()
+{
+    ll x;
+    //freopen("f.txt","r",stdin);
+    arr[0]=5;
+    brr[0]=1;
+    for(int i=1; i<11; i++)
+    {
+        brr[i]=brr[i-1]+arr[i-1];
+        arr[i]=arr[i-1]*5;
+    }
+    scanf("%d",&t);
+    for(int cas=1; cas<=t; cas++)
+    {
+        scanf("%lld",&n);
+        bool f=0;
+        ll first=5,last=n*5,mid;
+        while(first<=last)
+        {
+            mid=(first+last)/2;
+            mid-=(mid%5);
+            x=compute(mid);
+            if(x>n)
+                last=mid-5;
+            else if(x==n)
+            {
+                f=1;
+                ans=mid;
+                break;
+            }
+            else
+                first=mid+5;
+        }
+        if(f)
+            printf("Case %d: %lld\n",cas,ans);
+        else
+            printf("Case %d: impossible\n",cas);
+    }
+    return 0;
+}
