@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+int dx[]= {0,0,1,-1,1,1,-1,-1};
+int dy[]= {1,-1,0,0,1,-1,1,-1};
+int tx[]= {2,2,1,1,-2,-2,-1,-1};
+int ty[]= {-1,1,-2,2,1,-1,-2,2};
+int t,ans;
+
+ll n,a=1,b=2,c;
+ll fib[50],k=1;
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    fib[k++]=1;
+    fib[k++]=2;
+    while(a+b<1000000000)
+    {
+        c=a+b;
+        fib[k++]=c;
+        a=b;
+        b=c;
+    }
+    scanf("%d",&t);
+    for(int cas=1; cas<=t; cas++)
+    {
+        scanf("%lld",&n);
+        bool f=0;
+        vector<bool>num;
+        for(int i=k-1;i>0;i--)
+        {
+            if(fib[i]<=n)
+            {
+                //cout<<i<<" "<<fib[i]<<" "<<n<<endl;
+                n-=fib[i];
+                if(!f)
+                {
+                    f=1;
+                    for(int j=0;j<i-1;j++)
+                       num.push_back(0);
+                    num.push_back(1);
+                }
+                else
+                    num[i-1]=1;
+            }
+        }
+        //cout<<num.size()<<endl;
+        reverse(num.begin(),num.end());
+        printf("Case %d: ",cas);
+        for(int i=0;i<num.size();i++)
+            printf("%d",(int)num[i]);
+        printf("\n");
+    }
+    return 0;
+}
