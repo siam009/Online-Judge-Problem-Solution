@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+int dx[]= {0,0,1,-1,1,1,-1,-1};
+int dy[]= {1,-1,0,0,1,-1,1,-1};
+int tx[]= {2,2,1,1,-2,-2,-1,-1};
+int ty[]= {-1,1,-2,2,1,-1,-2,2};
+double ans;
+
+double dist(double a,double b,double c,double d)
+{
+    return sqrt((a-c)*(a-c)+(b-d)*(b-d));
+}
+
+double ts(double ax,double ay,double bx,double by,double cx,double cy,double dx,double dy)
+{
+    double a,b,c,d,w,x,y,z;
+    for(int i=0;i<200;i++)
+    {
+        a=ax+(bx-ax)/3;
+        b=ay+(by-ay)/3;
+        c=cx+(dx-cx)/3;
+        d=cy+(dy-cy)/3;
+        w=ax+(bx-ax)*2/3;
+        x=ay+(by-ay)*2/3;
+        y=cx+(dx-cx)*2/3;
+        z=cy+(dy-cy)*2/3;
+        //cout<<dist(a,b,c,d)<<" "<<dist(w,x,y,z)<<endl;
+        if(dist(a,b,c,d)<dist(w,x,y,z))
+        {
+            bx=w;
+            by=x;
+            dx=y;
+            dy=z;
+        }
+        else
+        {
+            ax=a;
+            ay=b;
+            cx=c;
+            cy=d;
+        }
+    }
+    return dist(ax,ay,cx,cy);
+}
+
+int main()
+{
+//    ios_base::sync_with_stdio(false);
+//    cin.tie(0);
+//    cout.tie(0);
+    int t,n;
+    double ax,ay,bx,by,cx,cy,dx,dy;
+    //freopen("f.txt","r",stdin);
+    scanf("%d",&t);
+    for(int cas=1; cas<=t; cas++)
+    {
+        scanf("%lf%lf%lf%lf%lf%lf%lf%lf",&ax,&ay,&bx,&by,&cx,&cy,&dx,&dy);
+        ans=ts(ax,ay,bx,by,cx,cy,dx,dy);
+        printf("Case %d: %0.10f\n",cas,ans);
+    }
+    return 0;
+}
