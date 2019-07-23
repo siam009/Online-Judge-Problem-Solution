@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define inf -123456789
+
+int visited=1,n,m,t,ans;
+string s1,s2;
+int dp[51][51][2][2],vis[51][51][2][2];
+
+void ready()
+{
+    //freopen("f.txt","r",stdin);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+}
+
+int call(int i,int j,int a,int b)
+{
+    if(i==n&&j==m)
+        return 0;
+    if(vis[i][j][a][b]==visited)
+        return dp[i][j][a][b];
+    dp[i][j][a][b]=inf;
+    vis[i][j][a][b]=visited;
+    if(i<n&&j<m)
+    {
+        if(s1[i]==s2[j])
+            dp[i][j][a][b]=max(dp[i][j][a][b],2+call(i+1,j+1,1,1));
+        dp[i][j][a][b]=max(dp[i][j][a][b],call(i+1,j+1,1,1));
+    }
+    if(i<n)
+        dp[i][j][a][b]=max(dp[i][j][a][b],call(i+1,j,1,0)-(b==1));
+    if(j<m)
+        dp[i][j][a][b]=max(dp[i][j][a][b],call(i,j+1,0,1)-(a==1));
+    return dp[i][j][a][b];
+}
+
+int main()
+{
+    ready();
+    cin>>t;
+    while(t--)
+    {
+        cin>>s1>>s2;
+        n=s1.size();
+        m=s2.size();
+        ans=inf;
+        for(int i=0;i<n;i++)
+            ans=max(ans,call(i,0,1,1));
+        for(int i=0;i<m;i++)
+            ans=max(ans,call(0,i,1,1));
+        cout<<ans<<endl;
+        visited++;
+    }
+    return 0;
+}
+
+
+/*
+
+2
+AADDEFGGHC
+ADCDEGH
+ERTTHCBYNQC
+BEARTBCHQYN
+
+*/
