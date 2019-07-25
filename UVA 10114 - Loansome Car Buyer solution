@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define inf -123456789
+
+void ready()
+{
+    //freopen("f.txt","r",stdin);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+}
+
+int main()
+{
+    ready();
+    double down_payment, loan_amount, depression_record;
+    int duration;
+    while(cin>>duration>>down_payment>>loan_amount>>depression_record)
+    {
+        if(duration<0)
+            break;
+        double car_price=down_payment+loan_amount;
+        double depression_rate[duration+1],temp_rate,prev_depression_rate;
+        int month_no,prev_month_no,ans;
+        for(int i=0; i<depression_record; i++)
+        {
+            cin>>month_no>>temp_rate;
+            if(i)
+            {
+                for(int j=prev_month_no; j<month_no; j++)
+                    depression_rate[j]=prev_depression_rate;
+            }
+            prev_month_no=month_no;
+            prev_depression_rate=temp_rate;
+        }
+        for(int j=prev_month_no; j<=duration; j++)
+            depression_rate[j]=prev_depression_rate;
+
+
+        double loan_reduce=loan_amount/duration;
+
+        for(int i=0; i<=duration; i++)
+        {
+            car_price=car_price-(car_price*depression_rate[i]);
+            if(i)
+                loan_amount-=loan_reduce;
+            if(loan_amount<car_price)
+            {
+                ans=i;
+                break;
+            }
+        }
+        if(ans==1)
+            cout<<ans<<" month"<<endl;
+        else
+            cout<<ans<<" months"<<endl;
+    }
+    return 0;
+}
+
+
+/*
+
+30 500.0 15000.0 3
+0 .10
+1 .03
+3 .002
+12 500.0 9999.99 2
+0 .05
+2 .1
+60 2400.0 30000.0 3
+0 .2
+1 .05
+12 .025
+-99 0 17000 1
+
+*/
