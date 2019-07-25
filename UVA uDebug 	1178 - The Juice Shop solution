@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+ll Exeuclid(ll a,ll b,ll *x,ll *y)
+{
+    if(a==0)
+    {
+        *x=0,*y=1;
+        return b;
+    }
+    ll x1,y1;
+    ll gcd=Exeuclid(b%a,a,&x1,&y1);
+    *x=y1-((b/a)*x1);
+    *y=x1;
+    return gcd;
+}
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    //freopen("g.txt","w",stdout);
+    bool flag=0;
+    ll a,b;
+    while(cin>>a>>b&&(a||b))
+    {
+        ll x,y;
+        if(flag)
+            cout<<endl;
+        ll ans=Exeuclid(a,b,&x,&y);
+        cout<<"minimum volume: "<<ans<<" liter(s)"<<endl;
+        if(a==b)
+            swap(x,y);
+        if(x==0)
+            cout<<a<<" liter(s) not needed"<<endl;
+        else if(x>0)
+            cout<<a<<" liter(s) poured "<<x<<" times"<<endl;
+        else
+            cout<<a<<" liter(s) withdrawn "<<-x<<" times"<<endl;
+        if(y==0)
+            cout<<b<<" liter(s) not needed"<<endl;
+        else if(y>0)
+            cout<<b<<" liter(s) poured "<<y<<" times"<<endl;
+        else
+            cout<<b<<" liter(s) withdrawn "<<-y<<" times"<<endl;
+        flag=1;
+    }
+}
