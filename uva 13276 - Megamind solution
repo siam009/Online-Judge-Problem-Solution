@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+int main()
+{
+    ll t,e,p,k,r,a,b,c,d,f,ans,x,y,z;
+    cin>>t;
+    for(int cas=1; cas<=t; cas++)
+    {
+        cin>>e>>p>>k>>r;
+        ans=0;
+        c=k*p;
+        f=e;
+        if(e>c)
+        {
+            e-=c;
+        }
+        else
+        {
+            ans+=e/p;
+            if(e%p)
+                ans++;
+            cout<<"Case "<<cas<<": "<<ans<<endl;
+            continue;
+        }
+        if(f>c&&r>=c)
+        {
+            cout<<"Case "<<cas<<": "<<-1<<endl;
+            continue;
+        }
+        a=c-r;
+        b=e/a;
+        ans=b*k;
+        f-=(b*a);
+        x=min(k,f/p+(int)((f%p)!=0));
+        ans+=x;
+        f-=(x*p);
+        if(f>0)
+        {
+            f+=r;
+            ans+=f/p;
+            ans+=(int)((f%p)!=0);
+        }
+        cout<<"Case "<<cas<<": "<<ans<<endl;
+    }
+    return 0;
+}
+
+
+/*
+
+
+4
+100000 1 1 4
+10 5 2 100000
+100000 12 3 11
+100000 100000 100000 100000
+
+
+*/
