@@ -1,0 +1,37 @@
+/* gcd(a,b) <= (a-b)
+a xor b >= (a-b)
+ so we will check when gcd(a,b) = a xor b = a-b
+ actually we can use a simple sieve for that and pre calculate the value
+gcd (g* (x+1) ) , g*x ) = x always
+so we will check if their xor is g or not */ 
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+
+int t,n=30000001;
+ll ans[30000001];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    for(int g=1;g<n;g++)
+    {
+        for(int x=1;g*x+g<n;x++)
+        {
+            if(((g*x+g)^(g*x))==g)
+                ans[g*x+g]++;
+        }
+    }
+    for(int g=1;g<n;g++)
+        ans[g]+=ans[g-1];
+    cin>>t;
+    for(int cas=1; cas<=t; cas++)
+    {
+        cin>>n;
+        cout<<"Case "<<cas<<": "<<ans[n]<<endl;
+    }
+    return 0;
+}
