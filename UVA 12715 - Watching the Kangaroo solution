@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+
+struct node
+{
+    ll l,r;
+};
+
+int t,p;
+const ll mod=(ll)1e13+7;
+ll n,m,a[100001],pos,val,x,y,z;
+node arr[100001],b[100001];
+
+bool cmp(node a,node b)
+{
+    return a.l<b.l||(a.l==b.l&&a.r>b.r);
+}
+
+bool cmp2(node a,node b)
+{
+    return a.l<b.l;
+}
+
+int main()
+{
+//    freopen("f.txt","r",stdin);
+//    freopen("g.txt","w",stdout);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    cin>>t;
+    for(int cas=1; cas<=t; cas++)
+    {
+        cin>>n>>m;
+        for(int i=0; i<n; i++)
+        {
+            cin>>arr[i].l>>arr[i].r;
+        }
+        for(int i=0; i<m; i++)
+        {
+            cin>>b[i].l;
+            b[i].r=i;
+        }
+        sort(arr,arr+n,cmp);
+        sort(b,b+m,cmp2);
+        int cur=0;
+        for(int i=1;i<n;i++)
+        {
+            if(arr[i].r>arr[cur].r)
+            {
+                arr[++cur]=arr[i];
+            }
+        }
+        //cout<<arr[5].l<<" "<<arr[5].r<<endl;
+        int j=0;
+        n=cur;
+        //cout<<b[m-1].l<<" "<<b[m-1].r<<endl;
+        for(int i=0; i<m; i++)
+        {
+            pos=b[i].r;
+            a[pos]=0;
+            val=0;
+            if(j>n)
+                j=n;
+            while(j<=n&&b[i].l>=arr[j].l)
+            {
+                if(b[i].l>arr[j].r)
+                {
+                    j++;
+                    continue;
+                }
+                val=min(b[i].l-arr[j].l,arr[j].r-b[i].l);
+                if(val>=a[pos])
+                {
+                    a[pos]=val;
+                    j++;
+                }
+                else
+                    break;
+            }
+            j--;
+        }
+        cout<<"Case "<<cas<<":"<<endl;
+        for(int i=0; i<m; i++)
+            cout<<a[i]<<endl;
+    }
+    return 0;
+}
