@@ -1,0 +1,144 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+#define N 10001
+
+struct node
+{
+    ll v,w;
+};
+
+struct node2
+{
+    ll u,v,w,sz;
+};
+
+ll t,n,m;
+ll new_mallenance_cost[N],mallenance_cost[N],bac[N],depth[N];
+vector<node>adj[N],adj2[N];
+vector<node2>temp;
+bool vis[N],visited[N];
+
+ll articulation_bridge(ll u,ll p,ll lvl)
+{
+    vis[u]=1;
+    ll v,sz=1,val;
+    depth[u]=bac[u]=lvl;
+    for(ll i=0; i<adj[u].size(); i++)
+    {
+        v=adj[u][i].v;
+        if(v==p)
+            continue;
+        if(!vis[v])
+        {
+            val=articulation_bridge(v,u,lvl+1);
+            sz+=val;
+            if(bac[v]>lvl)
+                temp.push_back({u,v,adj[u][i].w,val});
+            bac[u]=min(bac[u],bac[v]);
+        }
+        else
+            bac[u]=min(bac[u],depth[v]);
+    }
+    return sz;
+}
+
+bool call(ll u,ll p,ll w,ll lim)
+{
+    visited[u]=1;
+    ll v;
+    for(ll i=0; i<adj2[u].size(); i++)
+    {
+        v=adj2[u][i].v;
+        if(!visited[v])
+        {
+            if(!call(v,u,adj2[u][i].w,lim))
+                return 0;
+        }
+    }
+    if(new_mallenance_cost[u]+w<=lim)
+        new_mallenance_cost[u]+=w;
+    else
+        new_mallenance_cost[p]+=w;
+    if(new_mallenance_cost[u]>lim)
+        return 0;
+    return 1;
+}
+
+bool chk(ll lim)
+{
+    for(ll i=1;i<=n;i++)
+    {
+        visited[i]=0;
+        new_mallenance_cost[i]=mallenance_cost[i];
+    }
+    for(ll i=1; i<=n; i++)
+    {
+        if(!visited[i])
+        {
+            if(!call(i,0,0,lim))
+                return 0;
+        }
+    }
+    return 1;
+}
+
+int main()
+{
+//    freopen("f.txt","r",stdin);
+//    freopen("g.txt","w",stdout);
+    ll u,v,w,tree_size;
+    ll weight,low,high,mid,ans;
+    scanf("%lld",&t);
+    for(ll cas=1; cas<=t; cas++)
+    {
+        scanf("%lld%lld",&n,&m);
+        low=high=0;
+        for(ll i=1; i<=n; i++)
+        {
+            scanf("%lld",&mallenance_cost[i]);
+            vis[i]=visited[i]=0;
+            low=min(low,mallenance_cost[i]);
+            high+=mallenance_cost[i];
+            adj[i].clear();
+            adj2[i].clear();
+        }
+        for(ll i=0; i<m; i++)
+        {
+            scanf("%lld%lld%lld",&u,&v,&w);
+            adj[u].push_back({v,w});
+            adj[v].push_back({u,w});
+        }
+        for(ll i=1; i<=n; i++)
+        {
+            if(!vis[i])
+            {
+                temp.clear();
+                tree_size=articulation_bridge(i,-1,0);
+                for(ll j=0; j<temp.size(); j++)
+                {
+                    u=temp[j].u;
+                    v=temp[j].v;
+                    weight=temp[j].w*temp[j].sz*(tree_size-temp[j].sz);
+                    high+=weight;
+                    adj2[u].push_back({v,weight});
+                    adj2[v].push_back({u,weight});
+                }
+            }
+        }
+        while(low<=high)
+        {
+            mid=(low+high)>>1;
+            if(chk(mid))
+            {
+                high=mid-1;
+                ans=mid;
+            }
+            else
+                low=mid+1;
+        }
+        printf("Case %lld: %lld\n",cas,ans);
+    }
+    return 0;
+}
