@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+#define N 20
+
+const int inf=0x3f3f3f3f;
+int tree[(1<<N)+7],n,k,m,dp[(1<<N)+1][21],ans;
+
+void build_tree(int node)
+{
+    if(node>m)
+        return;
+    scanf("%d",&tree[node]);
+    node=node<<1;
+    build_tree(node);
+    build_tree(node|1);
+}
+
+void dfs(int node)
+{
+    if(node>m)
+        return;
+    dp[node][1]=tree[node];
+    int l=node<<1,r;
+    r=l|1;
+    dfs(l);
+    dfs(r);
+    for(int i=1; i<=k; i++)
+    {
+        for(int j=1; j<i; j++)
+        {
+            dp[node][i]=max(dp[node][i],dp[l][i-j]+dp[r][j]);
+        }
+    }
+    return;
+}
+
+int main()
+{
+//    freopen("f.txt","r",stdin);
+//    freopen("g.txt","w",stdout);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    while(scanf("%d",&n)&&n!=-1)
+    {
+        scanf("%d",&k);
+        m=(1<<(n+1))-1;
+        build_tree(1);
+        memset(dp,-inf,sizeof dp);
+        ans=tree[1];
+        dfs(1);
+        for(int i=1; i<=k; i++)
+            ans=max(ans,dp[1][i]);
+        printf("%d\n",ans);
+    }
+    return 0;
+}
