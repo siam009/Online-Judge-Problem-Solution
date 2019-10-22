@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+ll phi(ll x)
+{
+    ll ret=x;
+    for(ll i=2; i*i<=x; i++)
+    {
+        if(x%i==0)
+        {
+            while(x%i==0)
+            {
+                x/=i;
+            }
+            ret-=ret/i;
+        }
+    }
+    if(x>1)
+    {
+        ret-=ret/x;
+    }
+    return ret;
+}
+
+vector<ll> prime_generator(ll x)
+{
+    vector<ll>v;
+    for(ll i=2;i*i<=x;i++)
+    {
+        if(x%i==0)
+        {
+            while(x%i==0)
+            {
+                x/=i;
+            }
+            v.push_back(i);
+        }
+    }
+    if(x>1)
+        v.push_back(x);
+    return v;
+}
+
+long long fun (vector<long long>p, long long n)
+{
+    long long ans = 0;
+    int sz = (int) p.size();
+    for (int mask = 1; mask < (1 << sz) ; mask++)
+    {
+        long long num = 1LL;
+        for (int i = 0; i < sz; i++)
+        {
+            if (mask & (1 << i))
+            {
+                num *= p[i];
+            }
+        }
+        if (__builtin_popcount (mask) & 1)
+        {
+            ans += n / num;
+        }
+        else
+        {
+            ans -= n / num;
+        }
+    }
+    return ans;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    ll n,m,p,q,r;
+    cin>>n>>m;
+    r=phi(n)*phi(m);
+    ll a=n*m;
+    vector<ll>prime_a=prime_generator(n);
+    p=a-fun(prime_a,a)-r;
+    vector<ll>prime_b=prime_generator(m);
+    q=a-fun(prime_b,a)-r;
+    cout<<p<<" "<<q<<" "<<r<<endl;
+    return 0;
+}
