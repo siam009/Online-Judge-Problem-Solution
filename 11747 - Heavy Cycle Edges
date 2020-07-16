@@ -1,0 +1,76 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+struct node
+{
+    ll u,v,w,pos;
+};
+
+ll n,m,u,v,w,par[1001],arr[25001];
+bool vis[25011];
+
+bool cmp(node a,node b)
+{
+    return a.w<b.w;
+}
+
+ll find_parent(ll x)
+{
+    return (x==par[x])?x:find_parent(par[x]);
+}
+
+int main()
+{
+    //freopen("f.txt","r",stdin);
+    while(scanf("%d%d",&n,&m)&&(n||m))
+    {
+        vector<node>adj;
+        for(int i=0; i<n; i++)
+            par[i]=i;
+        for(int i=0; i<m; i++)
+        {
+            scanf("%lld%lld%lld",&u,&v,&w);
+            vis[i]=0;
+            if(u<v)
+                swap(u,v);
+            adj.push_back({u,v,w,i});
+        }
+        vis[m]=0;
+        sort(adj.begin(),adj.end(),cmp);
+        for(ll i=0; i<m; i++)
+        {
+            u=find_parent(adj[i].u);
+            v=find_parent(adj[i].v);
+            if(u!=v)
+            {
+                par[v]=u;
+                vis[i]=1;
+            }
+        }
+        bool flag=1;
+        ll k=0;
+        for(ll i=0; i<m; i++)
+        {
+            if(!vis[i])
+            {
+                flag=0;
+                arr[k++]=adj[i].w;
+            }
+        }
+        if(!flag)
+        {
+            sort(arr,arr+k);
+            for(ll i=0; i<k-1; i++)
+            {
+                printf("%lld ",arr[i]);
+            }
+            printf("%lld",arr[k-1]);
+        }
+        else
+            printf("forest");
+        printf("\n");
+    }
+    return 0;
+}

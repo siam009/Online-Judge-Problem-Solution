@@ -1,0 +1,72 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+ll dx[]= {0,0,1,-1,1,1,-1,-1};
+ll dy[]= {1,-1,0,0,1,-1,1,-1};
+ll tx[]= {2,2,1,1,-2,-2,-1,-1};
+ll ty[]= {-1,1,-2,2,1,-1,-2,2};
+ll t,a,b,k,ans;
+vector<ll>num;
+ll dp[12][84][2][83],num_size;
+
+ll call(ll pos,ll x,ll f,ll y)
+{
+   // cerr << f << " ";
+    if(pos==num_size)
+    {
+        if(x%k==0&&y==0)
+            return 1;
+        return 0;
+    }
+    if(dp[pos][x][f][y]!=-1)
+        return dp[pos][x][f][y];
+    ll lmt,res=0,tf,tx,ty;
+    if(f==0)
+        lmt=num[pos];
+    else
+        lmt=9;
+    for(ll i=0;i<=lmt;i++)
+    {
+        tf=f;
+        tx=x+i;
+        ty=(y*10+i)%k;
+        if(f==0&&i<lmt)
+            tf=1;
+        res+=call(pos+1,tx,tf,ty);
+    }
+    return dp[pos][x][f][y]=res;
+}
+
+ll solve(ll x)
+{
+    num.clear();
+    while(x)
+    {
+        num.push_back(x%10);
+        x/=10;
+    }
+    num_size=num.size();
+    reverse(num.begin(),num.end());
+    memset(dp,-1,sizeof dp);
+    return call(0,0,0,0);
+}
+
+int main()
+{
+    // freopen("f.txt","r",stdin);
+//   freopen("g.txt","w",stdout);
+
+    scanf("%lld",&t);
+    for(ll cas=1; cas<=t; cas++)
+    {
+        scanf("%lld%lld%lld",&a,&b,&k);
+        //cout<<b<<endl;
+        if(k >= 82)ans = 0;
+        else
+        ans=solve(b)-solve(a-1);
+        printf("Case %lld: %lld\n",cas,ans);
+    }
+    return 0;
+}

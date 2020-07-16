@@ -1,0 +1,114 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+
+ll arr[26];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    string s[1001],x[1001],y[1001];
+    ll val[1001],p,q;
+    int n=0;
+    while(cin>>s[n])
+    {
+        if(s[n]=="LOD")
+            cin>>x[n]>>val[n];
+        else if(s[n]=="INC")
+            cin>>x[n];
+        else if(s[n][0]=='J')
+            cin>>val[n];
+        else if(s[n]=="ADD"||s[n]=="MUL"||s[n]=="CMP")
+            cin>>x[n]>>y[n];
+        n++;
+    }
+    int i=0;
+    while(1)
+    {
+        if(s[i]=="HLT")
+            break;
+        if(s[i]=="LOD")
+        {
+            arr[x[i][0]-'A']=val[i];
+        }
+        else if(s[i]=="INC")
+        {
+            arr[x[i][0]-'A']++;
+        }
+        else if(s[i]=="ADD")
+        {
+            p=arr[x[i][0]-'A'];
+            q=arr[y[i][0]-'A'];
+            arr[x[i][0]-'A']=p+q;
+        }
+        else if(s[i]=="MUL")
+        {
+            p=arr[x[i][0]-'A'];
+            q=arr[y[i][0]-'A'];
+            arr[x[i][0]-'A']=p*q;
+        }
+        else if(s[i]=="JMP")
+        {
+            i=arr[15]=val[i];
+            continue;
+        }
+        else if(s[i]=="CMP")
+        {
+            p=arr[x[i][0]-'A'];
+            q=arr[y[i][0]-'A'];
+            if(p==q)
+                arr[2]=0;
+            else if(p>q)
+                arr[2]=1;
+            else
+                arr[2]=-1;
+        }
+        else if(s[i]=="JCZ")
+        {
+            if(arr[2]==0)
+            {
+                i=arr[15]=val[i];
+                continue;
+            }
+        }
+        else if(s[i]=="JCP")
+        {
+            if(arr[2]>0)
+            {
+                i=arr[15]=val[i];
+                continue;
+            }
+        }
+        else if(s[i]=="JCN")
+        {
+            if(arr[2]<0)
+            {
+                i=arr[15]=val[i];
+                continue;
+            }
+        }
+        ++arr[15];
+        i=arr[15];
+    }
+    for(int i=0; i<6; i++)
+        cout<<arr[i]<<" ";
+    cout<<arr[15]<<"\n";
+    return 0;
+}
+
+/*
+
+LOD A 3
+INC B
+ADD A B
+CMP B A
+JCZ 6
+JCN 7
+ADD A B
+HLT
+
+*/
+

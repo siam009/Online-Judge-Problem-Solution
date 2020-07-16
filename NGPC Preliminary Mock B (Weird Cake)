@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long int
+#define pi acos(-1)
+
+double fun(double r,double h)
+{
+    return (pi*h*h*(3*r-h))/3.0;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    double H,h1,h2,r,arr[3];
+    while(cin>>H>>h1>>h2)
+    {
+        r=H/2.0;
+        arr[0]=(pi*r*r*r*4.0)/3.0;
+        arr[1]=fun(r,H-h1);
+        arr[2]=fun(r,H-h2)-arr[1];
+        arr[0]=arr[0]-(arr[1]+arr[2]);
+        sort(arr,arr+3);
+        cout<<fixed<<setprecision(6)<<arr[0]<<" "<<arr[1]<<" "<<arr[2]<<"\n";
+    }
+    return 0;
+}
